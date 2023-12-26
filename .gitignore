@@ -1,0 +1,28 @@
+# Virtual Environment
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Plotly Dash assets
+assets/
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+*.pyz
+*.pyw
+__pycache__/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Environments
+.env
