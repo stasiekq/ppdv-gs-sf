@@ -47,7 +47,7 @@ def add_measurements(patient_id, data):
             patient_data = storage[patient_id]
 
         # convert timestamp
-        timestamp_str = str(data['trace']['timestamps'])
+        timestamp_str = str(data['trace']['timestamp'])
         timestamp = f"{timestamp_str[0:-12]}:{timestamp_str[-12:-10]}:{timestamp_str[-10:-8]}"
         patient_data['traces']['timestamps'].append(timestamp)
         patient_data['traces']['L0_values'].append(data['trace']['L0_value'])
