@@ -27,7 +27,7 @@ def add_measurements(patient_id, data):
                 "lastname": data["lastname"],
                 "name": data["name"],
                 "timestamps": [],
-                "L0_values": [],
+                "L0_value": [],
                 "L0_anomalies": [],
                 "L1_values": [],
                 "L1_anomalies": [],
