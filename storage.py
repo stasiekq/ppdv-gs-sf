@@ -21,25 +21,25 @@ def add_measurements(patient_id, data):
     try:
         if patient_id not in storage:
             patient_data = {
-                "birthdate": data["birthdate"],
-                "disabled": data["disabled"],
-                "firstname": data["firstname"],
-                "lastname": data["lastname"],
+                'birthdate': data['birthdate'],
+                'disabled': data['disabled'],
+                'firstname': data['firstname'],
+                'lastname': data['lastname'],
                 'traces': {
-                    "timestamps": [],
-                    "L0_values": [],
-                    "L0_anomalies": [],
-                    "L1_values": [],
-                    "L1_anomalies": [],
-                    "L2_values": [],
-                    "L2_anomalies": [],
-                    "R0_values": [],
-                    "R0_anomalies": [],
-                    "R1_values": [],
-                    "R1_anomalies": [],
-                    "R2_values": [],
-                    "R2_anomalies": [],
-                    "_expire_ts": []
+                    'timestamps': [],
+                    'L0_values': [],
+                    'L0_anomalies': [],
+                    'L1_values': [],
+                    'L1_anomalies': [],
+                    'L2_values': [],
+                    'L2_anomalies': [],
+                    'R0_values': [],
+                    'R0_anomalies': [],
+                    'R1_values': [],
+                    'R1_anomalies': [],
+                    'R2_values': [],
+                    'R2_anomalies': [],
+                    '_expire_ts': []
                 }
             }
             storage[patient_id] = patient_data
@@ -64,7 +64,7 @@ def add_measurements(patient_id, data):
         patient_data['traces']['R2_anomalies'].append(data['trace']['R2_anomaly'])
         patient_data['traces']['_expire_ts'].append(time.time())
     except TypeError:
-        logging.warning("No data! Make sure you are connected to VPN")
+        logging.warning('No data! Make sure you are connected to VPN')
 
 
 def expire_data(s):
