@@ -34,14 +34,19 @@ app.layout = html.Div([
     dcc.Graph(
         id='sensor-graph',
         figure={}
+    ),
+    dcc.Interval(
+        id='interval-component',
+        interval=100,
+        n_intervals=0
     )
 ])
 
 @callback(
     Output('sensor-graph', 'figure'),
-    [Input('patient-dropdown', 'value'),Input('sensor-checklist', 'value')],
+    [Input('patient-dropdown', 'value'), Input('sensor-checklist', 'value'), Input('interval-component', 'n_intervals')],
 )
-def update_output(patient_id, sensor_ids):
+def update_output(patient_id, sensor_ids, n_intervals):
     patient_data = storage.get_storage()[int(patient_id)]
     firstname = patient_data['firstname']
     lastname = patient_data['lastname']
