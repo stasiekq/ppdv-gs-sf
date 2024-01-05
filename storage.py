@@ -71,7 +71,7 @@ def expire_data(s):
     storage = get_storage()
     for patient_id, patient_data in storage.items():
         ts = time.time()
-        while len(patient_data["_expire_ts"]) > 0 and patient_data["_expire_ts"][0] < (ts - s):
+        while len(patient_data['traces']['_expire_ts']) > 0 and patient_data['traces']['_expire_ts'][0] < (ts - s):
             patient_data['traces']['timestamps'].pop(0)
             patient_data['traces']['L0_values'].pop(0)
             patient_data['traces']['L0_anomalies'].pop(0)
