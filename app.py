@@ -1,10 +1,11 @@
 from dash import Dash, html, dcc, callback, Output, Input
-import plotly.graph_objs as go
-import storage
-from api_client import fetch_data
 import time
 import threading
 import plotly.express as px
+from plotly.subplots import make_subplots
+import plotly.graph_objs as go
+import storage
+from api_client import fetch_data
 
 storage.init_storage()
 
@@ -35,6 +36,10 @@ app.layout = html.Div([
             id='sensor-graph',
             figure={}
         ),
+        dcc.Graph(
+            id='hm-subplots',
+            figure={}
+        ),
         html.Div([
             dcc.Graph(
                 id='l0-column-chart',
@@ -59,6 +64,7 @@ app.layout = html.Div([
 
 @callback(
     [Output('sensor-graph', 'figure'), 
+     Output('hm-subplots', 'figure'),
      Output('l0-column-chart', 'figure'), 
      Output('l1-column-chart', 'figure'), 
      Output('l2-column-chart', 'figure')],
@@ -82,6 +88,10 @@ def update_output(patient_id, sensor_ids, n_intervals):
             'name': f'{sensor_id} sensor',
         }
         sensor_data.append(trace)
+        
+    l0_h = px.imshow([patient_data['traces']['L0_values']], color_continuous_scale='Plasma')
+    l1_h = px.imshow([patient_data['traces']['L1_values']], color_continuous_scale='Plasma')
+    l2_h = px.imshow([patient_data['traces']['L2_values']], color_continuous_scale='Plasma')
 
     # Wykres kolumnowy dla L0
     l0_values = patient_data['traces']['L0_values']
@@ -116,12 +126,6 @@ def update_output(patient_id, sensor_ids, n_intervals):
         'marker': {'color': [l1_color_scale[int(l1_values[-1] / 1000 * (len(l1_color_scale) - 1))]]},
     }]
 
-    layout = {
-        'title': f'Scatter for sensors - patient {firstname} {lastname}',
-        'height': 400,
-        'width': 600,
-    }
-
     l1_chart_layout = {
         'title': f'L1 Column Chart - {firstname} {lastname}',
         'barmode': 'group',
@@ -139,21 +143,21 @@ def update_output(patient_id, sensor_ids, n_intervals):
         'marker': {'color': [l2_color_scale[int(l2_values[-1] / 1000 * (len(l2_color_scale) - 1))]]},
     }]
 
-    layout = {
-        'title': f'Scatter for sensors - patient {firstname} {lastname}',
-        'height': 400,
-        'width': 600,
-    }
-
     l2_chart_layout = {
         'title': f'L2 Column Chart - {firstname} {lastname}',
         'barmode': 'group',
         'height': 400,
         'width': 600,
     }
-    
 
-    return {'data': sensor_data, 'layout': layout}, {'data': l0_chart_data, 'layout': l0_chart_layout}, {'data': l1_chart_data, 'layout': l1_chart_layout}, {'data': l2_chart_data, 'layout': l2_chart_layout}
+    # Połączenie heatmap w jeden subplot
+    fig_heatmaps = make_subplots(rows=1, cols=3, subplot_titles=['L0 Heatmap', 'L1 Heatmap', 'L2 Heatmap'])
+    fig_heatmaps.add_trace(l0_h['data'][0], row=1, col=1)
+    fig_heatmaps.add_trace(l1_h['data'][0], row=1, col=2)
+    fig_heatmaps.add_trace(l2_h['data'][0], row=1, col=3)
+    fig_heatmaps.update_layout(height=400, width=1200, title_text=f'Heatmaps - {firstname} {lastname}')
+
+    return {'data': sensor_data, 'layout': layout}, fig_heatmaps, {'data': l0_chart_data, 'layout': l0_chart_layout}, {'data': l1_chart_data, 'layout': l1_chart_layout}, {'data': l2_chart_data, 'layout': l2_chart_layout}
 
 if __name__ == '__main__':
     app.run_server(debug=True)
