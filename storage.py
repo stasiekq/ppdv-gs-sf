@@ -86,3 +86,35 @@ def expire_data(s):
             patient_data['traces']['R2_values'].pop(0)
             patient_data['traces']['R2_anomalies'].pop(0)
             patient_data['traces']['_expire_ts'].pop(0)
+
+def get_last_measurement(patient_id):
+    storage = get_storage()
+
+    if patient_id in storage:
+        patient_data = storage[patient_id]
+        last_index = -1  # Index for the last measurement
+
+        if patient_data['traces']['timestamps']:
+            last_index = -1  # Index for the last measurement
+            last_measurement = {
+                'timestamp': patient_data['traces']['timestamps'][last_index],
+                'L0_value': patient_data['traces']['L0_values'][last_index],
+                'L0_anomaly': patient_data['traces']['L0_anomalies'][last_index],
+                'L1_value': patient_data['traces']['L1_values'][last_index],
+                'L1_anomaly': patient_data['traces']['L1_anomalies'][last_index],
+                'L2_value': patient_data['traces']['L2_values'][last_index],
+                'L2_anomaly': patient_data['traces']['L2_anomalies'][last_index],
+                'R0_value': patient_data['traces']['R0_values'][last_index],
+                'R0_anomaly': patient_data['traces']['R0_anomalies'][last_index],
+                'R1_value': patient_data['traces']['R1_values'][last_index],
+                'R1_anomaly': patient_data['traces']['R1_anomalies'][last_index],
+                'R2_value': patient_data['traces']['R2_values'][last_index],
+                'R2_anomaly': patient_data['traces']['R2_anomalies'][last_index]
+            }
+            return last_measurement
+        else:
+            logging.warning(f'No measurements available for patient {patient_id}')
+            return None
+    else:
+        logging.warning(f'Patient {patient_id} not found in storage')
+        return None
