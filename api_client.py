@@ -8,9 +8,15 @@ def fetch_data(patient_id: int):
     except requests.ConnectionError:
         return "Connection Error"
 
-    response_json = response.json()
+    if response.status_code != 200:
+        return f"Error: Received status code {response.status_code}"
+    try:
+        response_json = response.json()
+    except ValueError:
+        return "Error: Response is not in JSON format"
 
     return {
+        'id': patient_id,
         'birthdate': response_json['birthdate'],
         'disabled': response_json['disabled'],
         'firstname': response_json['firstname'],
